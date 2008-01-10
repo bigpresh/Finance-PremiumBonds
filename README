@@ -1,0 +1,39 @@
+Finance::PremiumBonds version 0.01
+===========================
+
+A very simple module to look up a Premium Bond holder's number on the
+National Savings and Investments website (www.nsandi.com) and determine
+whether the holder's number has won a prize lately.
+
+Currently I don't have a list of possible responses to look for (and they
+could change at any time anyway) so the module will return true if it
+receives a non-error response which doesn't include the recognised negative
+response text.  If it ever reports incorrect results to you, please do
+let me know so I can update it.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  LWP
+
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2008 by David Precious
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.7 or,
+at your option, any later version of Perl 5 you may have available.
+
+
+$Id$
