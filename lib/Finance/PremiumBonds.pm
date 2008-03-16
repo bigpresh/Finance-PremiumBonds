@@ -2,13 +2,13 @@ package Finance::PremiumBonds;
 
 # $Id$
 
-use 5.008000;
+use 5.005000;
 use strict;
 use warnings;
 use WWW::Mechanize;
 use Carp;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $checker_url  = 'http://www.nsandi.com/products/pb/haveYouWon.jsp';
 our $agent_string = "Perl/Finance::PremiumBonds $VERSION";
 our $holdernumfield = 'holderNumber';
@@ -49,9 +49,11 @@ sub has_won {
         return;
     }
 
+    # TODO: it'd be nice to actually detect a winning response, rather than
+    # the lack of a losing response - but I need a holder's number which has
+    # actually won in order to see what the response is :)
     return ($mech->content =~ m{not this time.*better luck next month}msi)
         ? 0 : 1;
-
 }
 
 
@@ -111,6 +113,15 @@ Copyright (C) 2008 by David Precious
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
 at your option, any later version of Perl 5 you may have available.
+
+
+=head1 LIMITATIONS
+
+Currently, the module detects lack of a recognised "losing" response rather
+than the presence of a winning response; without a holder's number which has
+won something, I can't see what the winning responses look like.  Maybe my
+meagre Premium Bonds investment will win something one day, then I can update
+this module :)
 
 
 =cut
