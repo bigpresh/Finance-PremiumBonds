@@ -7,3 +7,4 @@ t/1-basic.t
 t/2-pod.t
 t/3-pod-coverage.t
 lib/Finance/PremiumBonds.pm
+eg/example.pl
