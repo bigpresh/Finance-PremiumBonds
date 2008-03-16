@@ -1,5 +1,6 @@
 Changes
 Makefile.PL
+META.yml
 MANIFEST
 README
 t/1-basic.t
