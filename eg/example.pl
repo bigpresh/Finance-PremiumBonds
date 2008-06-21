@@ -13,7 +13,7 @@ if (!$holder_number) {
 
 if (defined(my $won = Finance::PremiumBonds::has_won($holder_number))) 
 {
-    print "Looks like you " . ($won)? 'may have won' : 'have not won';
+    print "Looks like you " . ($won ? 'may have won' : 'have not won') . "\n";
 } else {
     warn "An error occurred.";
 }

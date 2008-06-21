@@ -1,7 +1,7 @@
 --- #YAML:1.0
  name: Finance-PremiumBonds
  abstract:  Check if Premium Bond holder's number has won a prize
- version: 0.02
+ version: 0.03
  author:
    - David Precious <davidp@preshweb.co.uk>
  license: perl
