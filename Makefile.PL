@@ -1,15 +1,20 @@
-use 5.008007;
-use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
-WriteMakefile(
-    NAME              => 'Finance::PremiumBonds',
-    VERSION_FROM      => 'lib/Finance/PremiumBonds.pm',
-    PREREQ_PM         => { WWW::Mechanize => 0 },
-    NO_META           => 1,
-    ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
-      (ABSTRACT_FROM  => 'lib/Finance/PremiumBonds.pm',
-       AUTHOR         => 'David Precious <davidp@preshweb.co.uk>') : ()),
-);
-
 # $Id$
+
+use strict;
+use ExtUtils::MakeMaker;
+
+WriteMakefile(
+    NAME                => 'Finance::PremiumBonds',
+    AUTHOR              => 'David Precious <davidp@preshweb.co.uk>',
+    VERSION_FROM        => 'lib/Finance/PremiumBonds.pm',
+    ABSTRACT_FROM       => 'lib/Finance/PremiumBonds.pm',
+    PL_FILES            => {},
+    PREREQ_PM => {
+        'HTML::Table' => 0,
+    },
+    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean               => { FILES => 'Finance-PremiumBonds-*' },
+
+    # include the LICENSE param, as long as EU::MM is new enough to support it:
+    ($ExtUtils::MakeMaker::VERSION >= 6.3002 ? (LICENSE => "perl") : () ),
+);
