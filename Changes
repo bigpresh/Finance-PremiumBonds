@@ -1,5 +1,10 @@
 Revision history for Perl extension Finance::PremiumBonds.
 
+0.04  2009-01-05
+    - Remove silly left-in debugging aid which outputted the HTML we got
+      from the NS+I website to STDERR (heh, I guess nobody uses this
+      module, since nobody complained!)
+
 0.03  2008-06-21
     - fix stupid mistake in example script
     
