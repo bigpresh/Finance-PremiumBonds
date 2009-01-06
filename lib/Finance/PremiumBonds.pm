@@ -8,7 +8,7 @@ use warnings;
 use WWW::Mechanize;
 use Carp;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 our $checker_url  = 'http://www.nsandi.com/products/pb/haveYouWon.jsp';
 our $agent_string = "Perl/Finance::PremiumBonds $VERSION";
 our $holdernumfield = 'holderNumber';
@@ -39,7 +39,7 @@ sub has_won {
     $mech->field($holdernumfield, $holdernum);
     #$mech->field('check', 'go');
     $mech->submit()
-        or  warn "Unable to submit lookup - " . $mech->response->status_line 
+        or  warn "Unable to submit lookup - " . $mech->response->status_line;
     if ($mech->content =~ /holder number must be 10 numbers/msi
      || $mech->content =~ /check your holder's number - it is not valid/msi) 
     {
