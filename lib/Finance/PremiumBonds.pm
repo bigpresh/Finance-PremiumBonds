@@ -31,7 +31,7 @@ sub has_won {
 
     my $form = $mech->form_with_fields($holdernumfield);
     if (!$form) {
-        warn "Failed to find form containing $holdernum field "
+        warn "Failed to find form containing $holdernumfield "
             . " - perhaps NS+I website has been changed";
         return;
     }
