@@ -9,9 +9,9 @@ use WWW::Mechanize;
 use Carp;
 
 our $VERSION = '0.05';
-our $checker_url  = 'http://www.nsandi.com/products/pb/haveYouWon.jsp';
+our $checker_url  = 'http://www.nsandi.com/savings-premium-bonds-have-i-won';
 our $agent_string = "Perl/Finance::PremiumBonds $VERSION";
-our $holdernumfield = 'holderNumber';
+our $holdernumfield = 'pbhn';
 
 sub has_won {
 
@@ -37,9 +37,10 @@ sub has_won {
     }
     
     $mech->field($holdernumfield, $holdernum);
-    #$mech->field('check', 'go');
-    $mech->submit()
-        or  warn "Unable to submit lookup - " . $mech->response->status_line;
+    if (!$mech->click('submit')) {
+        warn "Unable to submit lookup - " . $mech->response->status_line;
+        return;
+    }
     if ($mech->content =~ /holder number must be 10 numbers/msi
      || $mech->content =~ /check your holder's number - it is not valid/msi) 
     {
@@ -47,10 +48,11 @@ sub has_won {
         return;
     }
 
+
     # TODO: it'd be nice to actually detect a winning response, rather than
     # the lack of a losing response - but I need a holder's number which has
     # actually won in order to see what the response is :)
-    return ($mech->content =~ m{not this time.*better luck next month}msi)
+    return ($mech->content =~ m{Sorry,? you haven't won}i)
         ? 0 : 1;
 }
 
@@ -106,7 +108,7 @@ David Precious, E<lt>davidp@preshweb.co.ukE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008 by David Precious
+Copyright (C) 2008-2011 by David Precious
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
