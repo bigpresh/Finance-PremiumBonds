@@ -108,7 +108,7 @@ David Precious, E<lt>davidp@preshweb.co.ukE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008-2011 by David Precious
+Copyright (C) 2008-2012 by David Precious
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
