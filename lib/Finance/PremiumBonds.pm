@@ -8,7 +8,7 @@ use warnings;
 use WWW::Mechanize;
 use Carp;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $checker_url  = 'http://www.nsandi.com/savings-premium-bonds-have-i-won';
 our $agent_string = "Perl/Finance::PremiumBonds $VERSION";
 our $holdernumfield = 'pbhn';
