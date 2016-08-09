@@ -17,23 +17,31 @@ DESCRIPTION
     Savings and Investments website to determine whether the holder has won
     any prizes recently.
 
-    Currently I don't have a list of possible responses to look for (and
-    they could change at any time anyway) so the module will return true if
-    it receives a non-error response which doesn't include the recognised
-    negative response text. If it ever reports incorrect results to you,
-    please do let me know so I can update it.
+    Now uses the AJAX interface the NS&I site uses, which returns some JSON
+    so we don't have to screen-scrape.
+
+    I've never won anything, so I don't know what the win response looks
+    like (if you have, please do help me by letting me know!), so it treats
+    the absence of the no_win status in the response as a win - this means
+    it's possible that it could falsely report positive if there are other
+    statuses, e.g. "failed to check" or similar.
 
 FUNCTIONS
-    has_won($holder_number)
-        Checks whether $holder_number has won any prizes recently. Returns 1
-        if it looks like you've won, 0 if you haven't, or undef if it failed
-        to check.
+    has_won($holder_number, $period)
+        Checks whether $holder_number has won any prizes in the specified
+        period. Returns 1 if it looks like you've won, 0 if you haven't, or
+        undef if it failed to check.
+
+        The period is any period recognised by the NS&I site - at the time
+        of writing, that's `this_month', `last_six_month',
+        `unclaimed_prize'. If it's not given, then `this_month' is used as a
+        sensible default.
 
 AUTHOR
     David Precious, <davidp@preshweb.co.uk>
 
 COPYRIGHT AND LICENSE
-    Copyright (C) 2008-2012 by David Precious
+    Copyright (C) 2008-2016 by David Precious
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself, either Perl version 5.8.7 or, at
