@@ -9,7 +9,7 @@ use LWP::UserAgent;
 use JSON;
 use Carp;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 our $checker_url  = 'http://www.nsandi.com/premium-bonds-have-i-won-ajax';
 our $agent_string = "Perl/Finance::PremiumBonds $VERSION";
 our $holdernumfield = '';

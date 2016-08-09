@@ -1,5 +1,9 @@
 Revision history for Perl extension Finance::PremiumBonds.
 
+0.07  2016-08-09
+    - Updates to handle changes in the NS&I site - now we can use their AJAXy
+      checker, and get back JSON instead of screen-scraping
+
 0.06  2012-09-07
     - Updates to handle changes in the NS&I website, and fix a typo in the error
       message output if the holder number field isn't found.
