@@ -5,55 +5,47 @@ package Finance::PremiumBonds;
 use 5.005000;
 use strict;
 use warnings;
-use WWW::Mechanize;
+use LWP::UserAgent;
+use JSON;
 use Carp;
 
 our $VERSION = '0.06';
-our $checker_url  = 'http://www.nsandi.com/savings-premium-bonds-have-i-won';
+our $checker_url  = 'http://www.nsandi.com/premium-bonds-have-i-won-ajax';
 our $agent_string = "Perl/Finance::PremiumBonds $VERSION";
-our $holdernumfield = 'pbhn';
+our $holdernumfield = '';
 
 sub has_won {
 
     my $holdernum = shift
         or carp "No holder number supplied" and return;
 
-    
-    my $mech = WWW::Mechanize->new( agent => $agent_string );
-    
-    $mech->get($checker_url);
-    
-    if (!$mech->success) {
-        warn "Initial request failed - " . $mech->response->status_line;
-        return;
-    }
-  
+    my $period = shift || 'this_month';
 
-    my $form = $mech->form_with_fields($holdernumfield);
-    if (!$form) {
-        warn "Failed to find form containing $holdernumfield "
-            . " - perhaps NS+I website has been changed";
+    my $ua = LWP::UserAgent->new( agent => $agent_string );
+    my $resp = $ua->post(
+        $checker_url,
+        {
+            field_premium_bond_number => $holdernum,
+            field_premium_bond_period => $period || 'this_month',
+        }
+    );
+
+    if (!$resp->is_success) {
+        warn "Request failed - " . $resp->status_line;
         return;
     }
-    
-    $mech->field($holdernumfield, $holdernum);
-    if (!$mech->click('submit')) {
-        warn "Unable to submit lookup - " . $mech->response->status_line;
-        return;
-    }
-    if ($mech->content =~ /holder number must be 10 numbers/msi
-     || $mech->content =~ /check your holder's number - it is not valid/msi) 
-    {
+
+    my $resp_data = JSON::from_json($resp->decoded_content);
+
+    if ($resp_data->{holder_number} eq 'is_invalid') {
         carp "Holder number not recognised by NS+I";
         return;
     }
 
-
-    # TODO: it'd be nice to actually detect a winning response, rather than
-    # the lack of a losing response - but I need a holder's number which has
-    # actually won in order to see what the response is :)
-    return ($mech->content =~ m{Sorry,? you haven't won}i)
-        ? 0 : 1;
+    # TODO: it'd be nice to know what the status is for a win (just 'win'?) but
+    # I've never won, so I don't know - so for now, just treat the absence of
+    # 'no_win' as a win.
+    return $resp_data->{status} eq 'no_win' ? 0 : 1;
 }
 
 
@@ -83,20 +75,29 @@ Quick way to look up a Premium Bond holder's number on the National Savings
 and Investments website to determine whether the holder has won any prizes
 recently.
 
-Currently I don't have a list of possible responses to look for (and they
-could change at any time anyway) so the module will return true if it
-receives a non-error response which doesn't include the recognised negative
-response text.  If it ever reports incorrect results to you, please do
-let me know so I can update it.
+Now uses the AJAX interface the NS&I site uses, which returns some JSON so we
+don't have to screen-scrape.
+
+I've never won anything, so I don't know what the win response looks like
+(if you have, please do help me by letting me know!), so it treats the absence
+of the no_win status in the response as a win - this means it's possible that
+it could falsely report positive if there are other statuses, e.g. "failed to
+check" or similar.
+
 
 =head1 FUNCTIONS
 
 =over 4
 
-=item has_won($holder_number)
+=item has_won($holder_number, $period)
 
-Checks whether $holder_number has won any prizes recently.  Returns 1 if
-it looks like you've won, 0 if you haven't, or undef if it failed to check.
+Checks whether $holder_number has won any prizes in the specified period.
+Returns 1 if it looks like you've won, 0 if you haven't, or undef if it
+failed to check.
+
+The period is any period recognised by the NS&I site - at the time of writing,
+that's C<this_month>, C<last_six_month>, C<unclaimed_prize>.  If it's not given,
+then C<this_month> is used as a sensible default.
 
 =back
 
@@ -108,7 +109,7 @@ David Precious, E<lt>davidp@preshweb.co.ukE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008-2012 by David Precious
+Copyright (C) 2008-2016 by David Precious
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
