@@ -10,7 +10,8 @@ WriteMakefile(
     ABSTRACT_FROM       => 'lib/Finance/PremiumBonds.pm',
     PL_FILES            => {},
     PREREQ_PM => {
-        'WWW::Mechanize' => 0,
+        'LWP::UserAgent' => 0,
+        'JSON' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Finance-PremiumBonds-*' },
